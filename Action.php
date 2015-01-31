@@ -10,7 +10,7 @@ $data = $user->data();
 
 
 ?>
-helllooo
+
 
 <html>
 <head>
@@ -32,14 +32,28 @@ helllooo
   </div>
 
    <div class="comment-block">
-    <!-- comment will be apped here from db-->
+    <?php 
+$comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '1'");
+
+if(!$comment->count()){
+  echo 'Cannot retrieve genres at this time';
+} else {
+  foreach($comment->results() as $comment) {
+    echo "<a href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a></p><p>Said...</p><p>". $comment->comment ."</p>";
+
+  }
+}
+
+
+    ?>
   </div>
   <!-- comment form -->
-  <form id="form" action="comment.php" method="post">
+  <form id="form"  method="post">
  
     <input type="hidden" name="postid" id="postid" value="1">
     <label>
-      Username: <p style="display:inline" id="username"><?php echo escape($data->username); ?></p>
+   <input type="hidden" name="username" id="username" value="<?php echo escape($data->username); ?>">
+  Username: <?php echo escape($data->username); ?>
     </label>
 </br>
     <label>

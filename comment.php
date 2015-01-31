@@ -1,39 +1,58 @@
 <?php
-require 'core/init.php';
-if (!empty($_POST['name']) AND !empty($_POST['mail']) AND !empty($_POST['comment']) AND !empty($_POST['postid'])) {
-    $username = ($_POST['username']);
-    $comment = ($_POST['comment']);
-    $postid = ($_POST['postid']);
+
+  if (isset( $_SERVER['HTTP_X_REQUESTED_WITH'] )):
+  require 'core/init.php';
+
+ if (isset($_POST["username"]) && (isset($_POST["comment"]) && (isset($_POST["postid"]) ))) {
+  $username = $_POST["username"];
+  $sub = $_POST["comment"];
+  $postid = $_POST["postid"];
  
   
  if(Input::exists()){
-  
-    $validate = new Validate();
+  $validate = new Validate();
     $validation = $validate->check($_POST, array(
         'comment' => array(
-          //'name' => 'username';
-            'required'=> true,
-            'min' => 2,
-            'max' => 350,
-            'unique' => 'comment'
+            'required' => true,
+            'min' =>2,
+            'max' => 300
           )
-        ));
-
-    if($validation->passed()){
+      ));
+    if($validation->passed()) {
+      try{ 
+        // I have to check if these variables are not null or exist. I.E. '$sub'
       $comment = DB::getInstance()->insert('comment', array(
-          'username' => '$username',
-          'comment' => '$comment',
-          'post_id' => '$postid'
+          'username' => "$username",
+          'comment' => "$sub",
+          'post_id' =>"$postid"
         ));
-    }   
+    }  catch(Exception $e) {
+        die($e->getMessage());
+      }  
+
+    } else{
+      foreach($validation->errors() as $error) {
+        echo $error, '<br>';
+      }   
+    }
   }
-}
+
+  
+
 ?>
 
 <div class="comment-item">
   <div class="comment-post">
-   <h3><a href="profile.php?user=<?php echo $username ?>"<?php echo $username ?>></a> <span>said....</span></h3>
-    <p><?php echo $comment ?></p>
+   
+      <a href="profile.php?user=<?php echo $username ?>"><?php echo $username ?></a>
+       <p>Said....</p>
+  
+    <p><?php echo $sub ?></p>
   </div>
 </div>
 
+<?php
+ }else {
+  return false;
+ }
+endif?>
