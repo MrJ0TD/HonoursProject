@@ -1,6 +1,7 @@
 $(document).ready(function(){
   var form = $('form');
   var submit = $('#submit');
+  var comment_id = $('.delete-btn').attr('id');
   
 
   form.on('submit', function(e) {
@@ -30,4 +31,32 @@ $(document).ready(function(){
       }
     });
   });
+
+  $('.delete-btn').each( function(){
+    var btn = this;
+    $(btn).click( function(e) {
+    // prevent default action
+    e.preventDefault();
+    $.ajax({
+      url: 'delete.php',
+      type: 'POST',
+      cache: false,
+      data: {comment_id: comment_id },  //form serizlize data
+      beforeSend: function(){
+        // change submit button value text and disabled it
+      // del.attr('disabled', 'disabled');
+      },
+      success: function(){
+       
+       window.location.reload(true);
+
+      },
+      error: function(e){
+        alert(e);
+      }
+    });
+  });
+  });
+
+
 });

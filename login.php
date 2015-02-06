@@ -52,5 +52,5 @@ if(Input::exists()){
 	</div>
 
 		<input type="hidden" name="token" value="<?php echo token::generate(); ?>" >
-		<input type="submit" calue="Log in">
+		<input type="submit" value="Log in">
 

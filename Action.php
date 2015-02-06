@@ -33,15 +33,21 @@ $data = $user->data();
 
    <div class="comment-block">
     <?php 
+    $user = new User();
 $comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '1'");
 
 if(!$comment->count()){
   echo 'Cannot retrieve genres at this time';
 } else {
+  echo "<div id='comment'>";
   foreach($comment->results() as $comment) {
-    echo "<a href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a></p><p>Said...</p><p>". $comment->comment ."</p>";
 
-  }
+    echo "
+    <a id='name' href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a></p><p class='said'>Said...</p><p id='comment'>". $comment->comment ."</p> ";
+    if($data->username == $comment->username){
+ echo" <input type='button' id=".$comment->comment_id." class='delete-btn' value='Delete'></br></div> ";
+}
+} 
 }
 
 
