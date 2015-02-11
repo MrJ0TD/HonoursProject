@@ -1,7 +1,6 @@
 $(document).ready(function(){
   var form = $('form');
   var submit = $('#submit');
-  var comment_id = $('.delete-btn').attr('id');
   
 
   form.on('submit', function(e) {
@@ -25,6 +24,9 @@ $(document).ready(function(){
         // reset form and button
         form.trigger('reset');
         submit.val('Submit Comment').removeAttr('disabled');
+
+        window.location.reload(true).fadeIn(800);
+
       },
       error: function(e){
         alert(e);
@@ -33,6 +35,8 @@ $(document).ready(function(){
   });
 
   $('.delete-btn').each( function(){
+      var comment_id = $(this).attr('id');
+      var username = $(this).data('username');
     var btn = this;
     $(btn).click( function(e) {
     // prevent default action
@@ -41,14 +45,14 @@ $(document).ready(function(){
       url: 'delete.php',
       type: 'POST',
       cache: false,
-      data: {comment_id: comment_id },  //form serizlize data
+      data: {comment_id: comment_id, username: username },  //form serizlize data
       beforeSend: function(){
         // change submit button value text and disabled it
       // del.attr('disabled', 'disabled');
       },
       success: function(){
        
-       window.location.reload(true);
+        console.log('yass');
 
       },
       error: function(e){

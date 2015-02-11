@@ -34,26 +34,31 @@ $data = $user->data();
    <div class="comment-block">
     <?php 
     $user = new User();
-$comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '1'");
+$comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '1' ORDER BY date_added DESC");
+?>
 
+<div class='comment'>
+  <?php
 if(!$comment->count()){
-  echo 'Cannot retrieve genres at this time';
+  echo 'No Comments at this time, be the first!';
 } else {
-  echo "<div id='comment'>";
+  
   foreach($comment->results() as $comment) {
 
     echo "
     <a id='name' href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a></p><p class='said'>Said...</p><p id='comment'>". $comment->comment ."</p> ";
     if($data->username == $comment->username){
- echo" <input type='button' id=".$comment->comment_id." class='delete-btn' value='Delete'></br></div> ";
+ echo" <input type='button' id=".$comment->comment_id." class='delete-btn' data-username='".$comment->username."' value='Delete'></br> ";
 }
 } 
 }
 
 
     ?>
+    </div>
   </div>
   <!-- comment form -->
+  <div id="input-form">
   <form id="form"  method="post">
  
     <input type="hidden" name="postid" id="postid" value="1">
@@ -69,6 +74,7 @@ if(!$comment->count()){
 </br>
     <input type="submit" id="submit" value="Submit Comment">
   </form>
+  </div>
   
 </body>
 </html>

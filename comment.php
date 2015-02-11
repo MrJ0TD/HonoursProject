@@ -3,6 +3,15 @@
   if (isset( $_SERVER['HTTP_X_REQUESTED_WITH'] )):
   require 'core/init.php';
 
+$user = new User();
+if(!$user->isLoggedIn()) {
+  Redirect::to('index.php');
+}
+
+$data = $user->data();
+
+
+
  if (isset($_POST["username"]) && (isset($_POST["comment"]) && (isset($_POST["postid"]) ))) {
   $username = $_POST["username"];
   $sub = $_POST["comment"];
@@ -40,7 +49,7 @@
   
 
 ?>
-
+<div id="comment-block">
 <div class="comment-item">
   <div class="comment-post">
    
@@ -48,9 +57,9 @@
        <p>Said....</p>
   
     <p><?php echo $sub ?></p>
-  </div>
+		</div>
+	</div>
 </div>
-
 <?php
  }else {
   return false;
