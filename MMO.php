@@ -33,7 +33,7 @@ $data = $user->data();
 
    <div class="comment-block">
     <?php 
-$comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '5'");
+$comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '5' ORDER BY date_added DESC");
 
 if(!$comment->count()){
   echo 'No Comments at this time, be the first!';
@@ -44,7 +44,7 @@ if(!$comment->count()){
     echo "
     <a id='name' href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a></p><p class='said'>Said...</p><p id='comment'>". $comment->comment ."</p> ";
     if($data->username == $comment->username){
- echo" <input type='button' id=".$comment->comment_id." class='delete-btn' value='Delete'></br></div> ";
+ echo" <input type='button' id=".$comment->comment_id." class='delete-btn' data-username='".$comment->username."' value='Delete'></br></div> ";
 }
 } 
 }

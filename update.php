@@ -16,6 +16,11 @@ if(Input::exists()) {
 						'required' => true,
 						'min' =>2,
 						'max' => 50
+					),
+				'about' => array(
+						'required' => false,
+						'min' =>2,
+						'max' => 300
 					)
 			));
 
@@ -23,7 +28,8 @@ if(Input::exists()) {
 
 			try{
 				$user->update(array(
-					'name' => Input::get('name')
+					'name' => Input::get('name'),
+					'about'=> Input::get('about')
 					));
 
 				Session::flash('home','Your details have been updated.');
@@ -48,7 +54,12 @@ if(Input::exists()) {
 	<div class="field">
 		<label for="name">Name</label>
 		<input type="text" name="name" value="<?php echo escape($user->data()->name); ?>">
-
+		</br>
+		<label for="about">About you:</label>
+		<textarea rows="4" cols="50" name="about"><?php echo escape($user->data()->about); ?>
+		</textarea>
+		
+		</br>
 		<input type="submit" value="Update">
 		<input type="hidden" name="token" value="<?php echo Token:: generate(); ?>">
 	</div>

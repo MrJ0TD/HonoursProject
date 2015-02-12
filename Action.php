@@ -16,22 +16,27 @@ $data = $user->data();
 <head>
   <title>Action</title>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 <script src="jqueryajax.js"></script>
 </head>
 <body>
-  <div class="post">
+  <div class="row">
+  <div id="post" class="col-lg-10 ">  
+    
     <?php
     $post = DB::getInstance()->get('post' , array('genre_id', '=', '1'));
 	foreach($post->results() as $post) {
-		echo "<h1>" .$post->post_title ."</h1>";
-		echo "<p>" .$post->post_body ."</p>";
+		echo "<h1 class='text-center'>" .$post->post_title ."</h1>";
+		echo "<p class='text-center'>" .$post->post_body ."</p>";
 
 	}
  ?>
+</div>
+     </div>
 
-  </div>
 
    <div class="comment-block">
+    <div class=".col-sm-6">
     <?php 
     $user = new User();
 $comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '1' ORDER BY date_added DESC");
@@ -45,18 +50,19 @@ if(!$comment->count()){
   
   foreach($comment->results() as $comment) {
 
-    echo "
-    <a id='name' href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a></p><p class='said'>Said...</p><p id='comment'>". $comment->comment ."</p> ";
+    echo " <div class='well'>
+    <a id='name' href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a></p><p class='said'>Said...</p><p id='comment'>". escape($comment->comment) ."</p> ";
     if($data->username == $comment->username){
  echo" <input type='button' id=".$comment->comment_id." class='delete-btn' data-username='".$comment->username."' value='Delete'></br> ";
-}
-} 
-}
+      }
+ echo"</div>";   } 
+  }
 
 
     ?>
     </div>
   </div>
+</div>
   <!-- comment form -->
   <div id="input-form">
   <form id="form"  method="post">

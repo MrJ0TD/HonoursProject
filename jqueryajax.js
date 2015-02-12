@@ -52,7 +52,7 @@ $(document).ready(function(){
       },
       success: function(){
        
-        console.log('yass');
+        window.location.reload(true);
 
       },
       error: function(e){
