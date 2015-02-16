@@ -1,6 +1,22 @@
+<html>
+<head>
+	 <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GamerLocator</title>
+  <link rel="stylesheet" type="text/css" href="css/login.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+
+</head>
 <?php 
 require_once 'core/init.php';
-
+$user = new User();
+if($user->isLoggedIn()) {
+	Redirect::to('index.php');
+}
 if(Input::exists()){
 	if(Token::check(Input::get('token'))){
 
@@ -33,24 +49,42 @@ if(Input::exists()){
 }
 
 ?>
+<div class="container">
+
+<div class="jumbotron">
+  <h1>Gamerlocator</h1> 
+ </div>
 
 
-<form action="" method="post">
-	<div class="field">
-		<label for="username">Username</label>
-		<input type="text" name="username" id="username" autocomplete="off">
-	</div>
+<div class="row">
+  <div class="col-md-12">
+    
+	<h2>Looking for a way to find poeple to play some of your favourite games with? Then look no more! Gamerlocator is a simple app that will help you find gamers to play with via game genres.</h2>
+    
+  </div>
+</div>
 
-	<div class="field">
-		<label for="password">Password</label>
-		<input type="password" name="password" id="password" autocomplete="off">
-	</div>
 
-	<div class="field">
-		<label for "remember">
-			<input type="checkbox" name="remember" id="remember"> Remember me</label>
-	</div>
-
-		<input type="hidden" name="token" value="<?php echo token::generate(); ?>" >
-		<input type="submit" value="Log in">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+            
+            <div class="account-wall">
+            	<h1 class="text-center login-title">Sign in to continue to Gamerlocator</h1>    
+                <form class="form-signin" action="" method="post">
+                <input type="text" class="form-control" name="username" id="username" autocomplete="off" placeholder="username" required autofocus>
+                <input type="password" class="form-control" name="password" id="password" autocomplete="off" placeholder="Password" required>
+                <input type="hidden" name="token" value="<?php echo token::generate(); ?>" >
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Sign in</button>
+                <label class="checkbox pull-left">
+                <input type="checkbox" name="remember" id="remember" >
+                    Remember me
+                </label>
+                <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
+                </form>
+            </div>
+            <a href="register.php" class="text-center new-account">Create an account </a>
+        </div>
+    </div>
+</div>
 

@@ -16,10 +16,11 @@ if($user->isLoggedIn()) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GamerLocator</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="bootstrap/css/style.css">
+ 
 <script src="jqueryajax.js"></script>
 </head>
 <body>
@@ -56,10 +57,9 @@ if($user->isLoggedIn()) {
 	</div>
    </nav>
 
-   <div class="row">
-   	<div class="col-md-12 ">
-	<h1 class="text-left">Hello <a href="profile.php?user=<?php echo escape($user->data()->username); ?>"><?php echo escape($user->data()->username); ?></a>!</h1>
-</div>
+   
+   		<h1 >Hello <a href="profile.php?user=<?php echo escape($user->data()->username); ?>"><?php echo escape($user->data()->username); ?></a>!</h1>
+
 	<ul class="nav nav-pills nav-stacked">
 		
 		<li li role="presentation"><a href="update.php">Update details</a></li>
@@ -75,7 +75,7 @@ if($user->hasPermission('admin')){
 }
 
 } else {
-		echo '<p>You need to <a href="login.php">log in</a> or get <a href="register.php">registered</a> son!!</p>';
+		Redirect::to('login.php');
 	}
 
 
