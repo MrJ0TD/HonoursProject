@@ -1,5 +1,5 @@
 <?php
-class comment{
+class Comment{
 private $_db,
 		$_data;
 

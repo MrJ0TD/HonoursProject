@@ -3,10 +3,10 @@ session_start();
 
 $GLOBALS['config'] = array(
 	'mysql' => array(
-			'host' => '127.0.0.1',
-			'username' =>'root',
+			'host' => '',
+			'username' =>'',
 			'password' => '',
-			'db' => 'gamerlocator'
+			'db' => ''
 
 		),
 	'remember' => array(
@@ -20,7 +20,7 @@ $GLOBALS['config'] = array(
 	);
 
 spl_autoload_register(function($class){
-	require_once 'classes/'.$class.'.php';
+	require_once 'classes/'.strtolower($class).'.php';
 
 });
 

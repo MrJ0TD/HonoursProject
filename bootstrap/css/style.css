@@ -1,0 +1,16 @@
+body { 
+    padding-top: 61px; 
+    padding-left:7px;
+    padding-right:7px;
+    overflow-x: hidden;
+     
+background: url(../../css/bg.png) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.well{
+	background: rgba(255,255,255, 0.4);
+}

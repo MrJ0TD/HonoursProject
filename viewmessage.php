@@ -1,20 +1,26 @@
 <?php
+ob_start();
 require 'core/init.php';
-$user = new User();
-if(!$user->isLoggedIn()) {
+
+if(!$username = Input::get('user')) {
 	Redirect::to('index.php');
-}
-
-$data = $user->data();
-
-
+} else {
+	$user = new User($username);
+	if(!$user->exists()) {
+		Redirect::to(404);
+	} else{
+		
+		$data = $user->data();
+	}
+	$user = new user();
+	
 
 ?>
 
 
 <html>
 <head>
-  <title>Action</title>
+  <title>Gamerlocator</title>
    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,12 +30,7 @@ $data = $user->data();
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="bootstrap/css/style.css">
-<script src="jqueryajax.js"></script>
-<script>
-$(document).ready(function(){
-    $(this).scrollTop(0);
-});
-</script>
+
 </head>
 <body>
   <nav class="navbar navbar-default navbar-fixed-top" >
@@ -50,15 +51,15 @@ $(document).ready(function(){
          <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">View Genres for Conversation <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="Action.php">Action</a></li>
+            <li class="active"><a href="Action.php">Action</a></li>
             <li><a href="Fighting.php">Fighting</a></li>
             <li><a href="Horror.php">Horror</a></li>
-            <li class="active"><a href="Sci-Fi.php">Sci-Fi</a></li>
+            <li><a href="Sci-Fi.php">Sci-Fi</a></li>
             <li><a href="MMO.php">MMO</a></li>
             <li><a href="FPS.php">FPS</a></li>
           </ul>
         </li> 
-         <li class="dropdown">
+        <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">View Gaming Platforms<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="playstation.php">Playstation</a></li>
@@ -67,96 +68,103 @@ $(document).ready(function(){
             <li><a href="pc.php">PC</a></li>
             
           </ul>
-        </li> 
-        <li><a href="pm.php">View messages</a></li>  
-        
+         <li><a href="pm.php">View messages</a></li> 
+       
       </ul>
     </div>
     </div>
   </div>
    </nav>
+   
   <div class="row">
   <div id="post" class="col-lg-10 ">  
     
-    <?php
-    $post = DB::getInstance()->get('post' , array('genre_id', '=', '4'));
-	foreach($post->results() as $post) {
-		echo "<h1 class='text-center'>" .$post->post_title ."</h1>";
-		echo "<p class='text-center'>" .$post->post_body ."</p>";
-
-	}
- ?>
+    <h1>Private Messages for <?php echo escape($user->data()->username);?></h1>
 </div>
      </div>
 
-
-   <div class="comment-block">
+<a href="#form">Go straight to the bottom</a>
+   <div class="message-block">
     <div class=".col-sm-6">
-     <?php 
-    
-//  $image = DB::getInstance()->query("SELECT * FROM users WHERE id = ".$data->id."" );
-//  foreach($image->results() as $image) {
-//  $mime = "image/jpeg";
-//  $b64Src = "data:".$mime.";base64," . base64_encode($image->img);
-//  echo '<img src="'.$b64Src.'" alt="" width=200 height=200/>', '<br>';
-// }
-  
-$comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '4' ORDER BY date_added DESC LIMIT 10");
+<?php
 
-if(!$comment->count()){
-  echo 'No Comments at this time, be the first!';
+$message = DB::getInstance()->query("SELECT * FROM message WHERE sender  = '".$user->data()->username."' and reciever = '".$data->username."' or sender='".$data->username."' and reciever = '".$user->data()->username."'");
+
+if(!$message->count()){
+  echo 'There are currently no messages here!';
 } else {
   echo "<div id='comment'>";
+  foreach($message->results() as $message) {
 
-  foreach($comment->results() as $comment) {
-$default = '<img src="profile_default.jpg" width=100 height=100>';
-    $image = '<img src="'. $comment->filepath .'" class="img-circle" width=100 height=100>';
-      echo " <div class='well'>";
-      echo "<div class='row'>";
-      echo "<div class='col-md-1'>";
-if(!$comment->filepath){
-    echo($default);
-  } else{
-    echo($image);
+       echo " <div class='well'>";
+     //echo"<p>Created by :<a href='profile.php?user=".$message->usera."'".$message->usera."";
+     echo"<p>Created by:  <a href='profile.php?user=".$message->sender."'>".$message->sender."</a> and sent to <a href='profile.php?user=".$message->reciever."'>".$message->reciever."</a></p>";
+     echo"<p>Message: ".$message->message."</p>";
+     echo  "</br><p>Sent on: ". $message->added ."</p>";
+ echo"</div>";   
   }
-  echo '</div>';
-
   
-  echo "<div class='col-md-3'>";
-  echo  "</br><a id='name' href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a> Said...</p><p id='comment'>". escape($comment->comment) ."</p> ";
-    if($data->username == $comment->username){
- echo"<button class='btn btn-default btn-primary' id=".$comment->comment_id." data-username='".$comment->username."' name ='delete-btn' type='submit'>Delete</button>";
+}
+ if(Input::exists()){
+  
+    $validate = new Validate();
+    $validation = $validate->check($_POST, array(
+        
+        'message' => array(
+            'required'=> true,
+            'min' => 2,
+            'max' => 500
+          )
+      ));
+
+    if($validation->passed()){
+      $user = new user();
+
+      
+      
+
+      try {
+
+        $user->message(array(
+          'sender' => $user->data()->username,
+          'reciever' => $data->username,
+          'message' => Input::get('message')
+            
+          ));
+        Redirect::to('viewmessage.php?user='.$data->username.'#form');
+        
+
+
+      } catch(Exception $e){
+        die($e->getMessage());
       }
- echo"</div>"; 
- echo "</div>";
-   echo '</div>';
+    } else {
+      foreach($validation->errors() as $error){
+        echo $error, '<br>';
+      }
+    }
   } 
-  }
   
+?>
 
-
-    ?>
+  </div>
     </div>
+    <a href="#top">Back to top</a>
+    <div id="input-form">
+  <form id="form"  action="" method="post">
+
+</br>
+    <label>
+      <span>Add message to conversation:</span>
+    </br>
+      <textarea name="message" id="message" required="true" cols="30" rows="10" placeholder="Type your message here...." required></textarea>
+    </label>
+</br>
+    <input type="submit" id="submit" value="Submit Comment" >
+  </form>
+  
   </div>
 </div>
-  <!-- comment form -->
-  <div id="input-form">
-  <form id="form"  method="post">
- 
-    <input type="hidden" name="postid" id="postid" value="4">
-    <label>
-   <input type="hidden" name="username" id="username" value="<?php echo escape($data->username); ?>">
-  Username: <?php echo escape($data->username); ?>
-    </label>
-</br>
-    <label>
-      <span>Your comment *</span>
-      <textarea name="comment" id="comment" required="true" cols="30" rows="10" placeholder="Type your comment here...." required></textarea>
-    </label>
-</br>
-   <a href="#post"><input type="submit" id="submit" value="Submit Comment"></a>
-  </form>
-  </div>
   </br>
   </br>
   </br>
@@ -171,3 +179,5 @@ if(!$comment->filepath){
         </div>
 </body>
 </html>
+<?php
+}
