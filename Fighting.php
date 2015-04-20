@@ -25,6 +25,11 @@ $data = $user->data();
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="bootstrap/css/style.css">
 <script src="jqueryajax.js"></script>
+<script>
+$(document).ready(function(){
+    $(this).scrollTop(0);
+});
+</script>
 </head>
 <body>
   <nav class="navbar navbar-default navbar-fixed-top" >
@@ -53,32 +58,42 @@ $data = $user->data();
             <li><a href="FPS.php">FPS</a></li>
           </ul>
         </li> 
-         
-        <li><a href="#">Contact</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">View Gaming Platforms<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="playstation.php">Playstation</a></li>
+            <li><a href="xbox.php">Xbox</a></li>
+            <li><a href="nintendo.php">Nintendo</a></li>
+            <li><a href="pc.php">PC</a></li>
+            
+          </ul>
+        </li> 
+        <li><a href="pm.php">View messages</a></li>  
+        
       </ul>
     </div>
     </div>
   </div>
    </nav>
-   <div class="row">
+  <div class="row">
   <div id="post" class="col-lg-10 ">  
+    
     <?php
     $post = DB::getInstance()->get('post' , array('genre_id', '=', '2'));
 	foreach($post->results() as $post) {
-		  echo "<h1 class='text-center'>" .$post->post_title ."</h1>";
-    echo "<p class='text-center'>" .$post->post_body ."</p>";
+		echo "<h1 class='text-center'>" .$post->post_title ."</h1>";
+		echo "<p class='text-center'>" .$post->post_body ."</p>";
 
 	}
  ?>
-
-  </div>
 </div>
+     </div>
+
 
    <div class="comment-block">
     <div class=".col-sm-6">
-    <?php 
-    $default = '<img src="profile_default.jpg" width=100 height=100>';
-  $image = '<img src="get.php" width=200 height=200>';
+     <?php 
+    
 //  $image = DB::getInstance()->query("SELECT * FROM users WHERE id = ".$data->id."" );
 //  foreach($image->results() as $image) {
 //  $mime = "image/jpeg";
@@ -86,33 +101,46 @@ $data = $user->data();
 //  echo '<img src="'.$b64Src.'" alt="" width=200 height=200/>', '<br>';
 // }
   
-$comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '2' ORDER BY date_added DESC");
+$comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '2' ORDER BY date_added DESC LIMIT 10");
 
 if(!$comment->count()){
   echo 'No Comments at this time, be the first!';
 } else {
   echo "<div id='comment'>";
-  foreach($comment->results() as $comment) {
 
+  foreach($comment->results() as $comment) {
+$default = '<img src="profile_default.jpg" width=100 height=100>';
+    $image = '<img src="'. $comment->filepath .'" class="img-circle" width=100 height=100>';
       echo " <div class='well'>";
-if(!$data->img_name){
+      echo "<div class='row'>";
+      echo "<div class='col-md-1'>";
+if(!$comment->filepath){
     echo($default);
   } else{
     echo($image);
   }
-  echo  "</br><a id='name' href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a></p><p class='said'>Said...</p><p id='comment'>". escape($comment->comment) ."</p> ";
-    if($data->username == $comment->username){
- echo" <input type='button' id=".$comment->comment_id." class='delete-btn' data-username='".$comment->username."' value='Delete'></br> ";
-      }
- echo"</div>";   } 
-  }
+  echo '</div>';
 
+  
+  echo "<div class='col-md-3'>";
+  echo  "</br><a id='name' href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a> Said...</p><p id='comment'>". escape($comment->comment) ."</p> ";
+    if($data->username == $comment->username){
+ echo"<button class='btn btn-default btn-primary' id=".$comment->comment_id." data-username='".$comment->username."' name ='delete-btn' type='submit'>Delete</button>";
+      }
+ echo"</div>"; 
+ echo "</div>";
+   echo '</div>';
+  } 
+  }
+  
 
 
     ?>
- 
+    </div>
   </div>
+</div>
   <!-- comment form -->
+  <div id="input-form">
   <form id="form"  method="post">
  
     <input type="hidden" name="postid" id="postid" value="2">
@@ -126,8 +154,23 @@ if(!$data->img_name){
       <textarea name="comment" id="comment" required="true" cols="30" rows="10" placeholder="Type your comment here...." required></textarea>
     </label>
 </br>
-    <input type="submit" id="submit" value="Submit Comment">
+   <a href="#post"><input type="submit" id="submit" value="Submit Comment"></a>
   </form>
+  </div>
+  
+  </br>
+  </br>
+  </br>
+  </br>
+  
+  <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container-fluid">
+            <div class="navbar-text pull-left" id="author">
+		<p class="text-muted">&copy; Joshua McGregor 2015</p>
+            </div>
+            
+            </div>
+        </div>
   
 </body>
 </html>

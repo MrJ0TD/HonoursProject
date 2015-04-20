@@ -1,35 +1,81 @@
 <?php
-require 'core/init.php';
-$user = new User();
-if(!$user->isLoggedIn()) {
-	Redirect::to('index.php');
-}
+require_once 'core/init.php';
 
-$data = $user->data();
+if(!$username = Input::get('user')) {
+  Redirect::to('index.php');
+} else {
+  $user = new User($username);
+  if(!$user->exists()) {
+    Redirect::to(404);
+  } else{
+    $data = $user->data();
+  }
+  if(Input::exists()){
+  
+    $validate = new Validate();
+    $validation = $validate->check($_POST, array(
+        
+        'comment' => array(
+            'required'=> true,
+            'min' => 2,
+            'max' => 500
+          )
+      ));
+
+    if($validation->passed()){
+
+            $user = new user();
+
+      
+      
+
+      try {
+      if($user->data()->username == $data->username){
+      	Session::flash('home', 'Your are not able to message yourself!');
+        Redirect::to('index.php');
+      	
+      } 
+
+        $user->message(array(
+          'sender' => $user->data()->username,
+          'reciever' => $data->username,
+          'message' => Input::get('comment')
+            
+          ));
+Session::flash('home', 'Your message has been sent!');
+        Redirect::to('index.php');
+        
 
 
+      } catch(Exception $e){
+        die($e->getMessage());
+      }
+    } else {
+      foreach($validation->errors() as $error){
+        echo $error, '<br>';
+      }
+    }  
+    }
+  
+  
 
-?>
+  
+  ?>
 
 
 <html>
 <head>
-  <title>Action</title>
+  <title>Gamerlocator</title>
    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GamerLocator</title>
+  
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="bootstrap/css/style.css">
-<script src="jqueryajax.js"></script>
-<script>
-$(document).ready(function(){
-    $(this).scrollTop(0);
-});
-</script>
+<!--<script src="pm.js"></script>-->
 </head>
 <body>
   <nav class="navbar navbar-default navbar-fixed-top" >
@@ -50,10 +96,10 @@ $(document).ready(function(){
          <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">View Genres for Conversation <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="Action.php">Action</a></li>
+            <li class="active"><a href="Action.php">Action</a></li>
             <li><a href="Fighting.php">Fighting</a></li>
             <li><a href="Horror.php">Horror</a></li>
-            <li class="active"><a href="Sci-Fi.php">Sci-Fi</a></li>
+            <li><a href="Sci-Fi.php">Sci-Fi</a></li>
             <li><a href="MMO.php">MMO</a></li>
             <li><a href="FPS.php">FPS</a></li>
           </ul>
@@ -68,93 +114,35 @@ $(document).ready(function(){
             
           </ul>
         </li> 
-        <li><a href="pm.php">View messages</a></li>  
+         <li><a href="pm.php">View messages</a></li> 
         
       </ul>
     </div>
     </div>
   </div>
    </nav>
-  <div class="row">
-  <div id="post" class="col-lg-10 ">  
-    
-    <?php
-    $post = DB::getInstance()->get('post' , array('genre_id', '=', '4'));
-	foreach($post->results() as $post) {
-		echo "<h1 class='text-center'>" .$post->post_title ."</h1>";
-		echo "<p class='text-center'>" .$post->post_body ."</p>";
-
-	}
- ?>
-</div>
-     </div>
-
-
-   <div class="comment-block">
-    <div class=".col-sm-6">
-     <?php 
-    
-//  $image = DB::getInstance()->query("SELECT * FROM users WHERE id = ".$data->id."" );
-//  foreach($image->results() as $image) {
-//  $mime = "image/jpeg";
-//  $b64Src = "data:".$mime.";base64," . base64_encode($image->img);
-//  echo '<img src="'.$b64Src.'" alt="" width=200 height=200/>', '<br>';
-// }
   
-$comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '4' ORDER BY date_added DESC LIMIT 10");
-
-if(!$comment->count()){
-  echo 'No Comments at this time, be the first!';
-} else {
-  echo "<div id='comment'>";
-
-  foreach($comment->results() as $comment) {
-$default = '<img src="profile_default.jpg" width=100 height=100>';
-    $image = '<img src="'. $comment->filepath .'" class="img-circle" width=100 height=100>';
-      echo " <div class='well'>";
-      echo "<div class='row'>";
-      echo "<div class='col-md-1'>";
-if(!$comment->filepath){
-    echo($default);
-  } else{
-    echo($image);
-  }
-  echo '</div>';
-
-  
-  echo "<div class='col-md-3'>";
-  echo  "</br><a id='name' href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a> Said...</p><p id='comment'>". escape($comment->comment) ."</p> ";
-    if($data->username == $comment->username){
- echo"<button class='btn btn-default btn-primary' id=".$comment->comment_id." data-username='".$comment->username."' name ='delete-btn' type='submit'>Delete</button>";
-      }
- echo"</div>"; 
- echo "</div>";
-   echo '</div>';
-  } 
-  }
   
 
 
-    ?>
-    </div>
-  </div>
-</div>
+
+   <h1>Send a message to <?php echo escape($data->username); ?></h1>
   <!-- comment form -->
+
+  <div class="success">
+
+  </div>
   <div id="input-form">
-  <form id="form"  method="post">
- 
-    <input type="hidden" name="postid" id="postid" value="4">
-    <label>
-   <input type="hidden" name="username" id="username" value="<?php echo escape($data->username); ?>">
-  Username: <?php echo escape($data->username); ?>
-    </label>
+  <form id="form"  action="" method="post">
+
 </br>
     <label>
-      <span>Your comment *</span>
+      <span>Your message *</span>
+    </br>
       <textarea name="comment" id="comment" required="true" cols="30" rows="10" placeholder="Type your comment here...." required></textarea>
     </label>
 </br>
-   <a href="#post"><input type="submit" id="submit" value="Submit Comment"></a>
+    <input type="submit" id="submit" value="Submit Comment">
   </form>
   </div>
   </br>
@@ -171,3 +159,5 @@ if(!$comment->filepath){
         </div>
 </body>
 </html>
+<?php
+}

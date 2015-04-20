@@ -26,6 +26,9 @@ $(document).ready(function(){
         submit.val('Submit Comment').removeAttr('disabled');
 
         window.location.reload(true).fadeIn(800);
+        $(function() {
+   $('body').scrollTop(0);
+});
 
       },
       error: function(e){
@@ -34,7 +37,7 @@ $(document).ready(function(){
     });
   });
 
-  $('.delete-btn').each( function(){
+  $('.btn').each( function(){
       var comment_id = $(this).attr('id');
       var username = $(this).data('username');
     var btn = this;

@@ -1,23 +1,18 @@
-body:before {
-content: "";
-        position: absolute;
-        height: 20%; width: 20%;
-        background: url(../bg.jpg);
-        background-size: cover;
-        z-index: -1; /* Keep the background behind the content */
-        
-        /* don't forget to use the prefixes you need */
-        -webkit-transform: scale(5);
-        -webkit-transform-origin: top left;
-        -webkit-filter: blur(1px);
+body{
+    padding-top: 61px;
+    background: url(bg.png) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; }
 
-}
-
-.jumbotron{
-	
-	color:#000;
-	background: rgba(255,255,255, 0.4);
-	text-align:center;
+.jumbotron {
+  background: url(gamerlocator.png) no-repeat center ; 
+  -webkit-background-size: 100% 100%;
+    -moz-background-size: 100% 100%;
+    -o-background-size: 100% 100%;
+    background-size: 100% 100%;
+  height:250px;
 }
 
 .col-md-12{
@@ -97,4 +92,27 @@ text-align:center;
 {
     display: block;
     margin-top: 10px;
+}
+ .textbox { 
+    -moz-border-radius-bottomright: 30px; 
+    -webkit-border-bottom-right-radius: 30px; 
+    border-bottom-right-radius: 30px; 
+    border: 1px solid #848484; 
+    outline:0; 
+    height:25px; 
+   
+    padding-right:20px; 
+  }
+
+  textarea {
+    
+    height: 120px;
+    border: 3px solid #cccccc;
+   
+    font-family: Tahoma, sans-serif;
+   
+}
+
+#checkboxes br{
+    display:none;
 }

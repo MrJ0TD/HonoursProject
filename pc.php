@@ -24,7 +24,7 @@ $data = $user->data();
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="bootstrap/css/style.css">
-<script src="jqueryajax.js"></script>
+
 <script>
 $(document).ready(function(){
     $(this).scrollTop(0);
@@ -53,114 +53,77 @@ $(document).ready(function(){
             <li><a href="Action.php">Action</a></li>
             <li><a href="Fighting.php">Fighting</a></li>
             <li><a href="Horror.php">Horror</a></li>
-            <li class="active"><a href="Sci-Fi.php">Sci-Fi</a></li>
+            <li><a href="Sci-Fi.php">Sci-Fi</a></li>
             <li><a href="MMO.php">MMO</a></li>
             <li><a href="FPS.php">FPS</a></li>
           </ul>
         </li> 
-         <li class="dropdown">
+          <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">View Gaming Platforms<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="playstation.php">Playstation</a></li>
             <li><a href="xbox.php">Xbox</a></li>
             <li><a href="nintendo.php">Nintendo</a></li>
-            <li><a href="pc.php">PC</a></li>
+            <li class="active"><a href="pc.php">PC</a></li>
             
           </ul>
         </li> 
-        <li><a href="pm.php">View messages</a></li>  
-        
+         <li><a href="pm.php">View messages</a></li>  
       </ul>
     </div>
     </div>
   </div>
    </nav>
+   <div class="container-fluid">
   <div class="row">
   <div id="post" class="col-lg-10 ">  
     
-    <?php
-    $post = DB::getInstance()->get('post' , array('genre_id', '=', '4'));
-	foreach($post->results() as $post) {
-		echo "<h1 class='text-center'>" .$post->post_title ."</h1>";
-		echo "<p class='text-center'>" .$post->post_body ."</p>";
-
-	}
- ?>
+   <h1 class='text-center'>Xbox</h1>
+	<p class='text-center'>Below is a list of Users who all love the PC!</p>
 </div>
      </div>
 
 
-   <div class="comment-block">
-    <div class=".col-sm-6">
+ 
      <?php 
-    
-//  $image = DB::getInstance()->query("SELECT * FROM users WHERE id = ".$data->id."" );
-//  foreach($image->results() as $image) {
-//  $mime = "image/jpeg";
-//  $b64Src = "data:".$mime.";base64," . base64_encode($image->img);
-//  echo '<img src="'.$b64Src.'" alt="" width=200 height=200/>', '<br>';
-// }
-  
-$comment = DB::getInstance()->query("SELECT * FROM comment WHERE post_id = '4' ORDER BY date_added DESC LIMIT 10");
+      
+$users = DB::getInstance()->query("SELECT * FROM users WHERE console LIKE '%PC%'");
 
-if(!$comment->count()){
-  echo 'No Comments at this time, be the first!';
+if(!$users->count()){
+  echo 'Nobody seems to like the PC!';
 } else {
-  echo "<div id='comment'>";
-
-  foreach($comment->results() as $comment) {
+ 
+  foreach($users->results() as $users) {
 $default = '<img src="profile_default.jpg" width=100 height=100>';
-    $image = '<img src="'. $comment->filepath .'" class="img-circle" width=100 height=100>';
-      echo " <div class='well'>";
-      echo "<div class='row'>";
-      echo "<div class='col-md-1'>";
-if(!$comment->filepath){
+    $image = '<img src="'. $users->filepath .'" class="img-circle" width=100 height=100>';
+    echo " <div class='well'>";
+    echo "<div class='row'>";
+    	echo "<div class='col-md-4'>";
+      
+      
+if(!$users->filepath){
     echo($default);
   } else{
     echo($image);
   }
-  echo '</div>';
-
-  
-  echo "<div class='col-md-3'>";
-  echo  "</br><a id='name' href = 'profile.php?user=".$comment->username ."'>" .$comment->username ."</a> Said...</p><p id='comment'>". escape($comment->comment) ."</p> ";
-    if($data->username == $comment->username){
- echo"<button class='btn btn-default btn-primary' id=".$comment->comment_id." data-username='".$comment->username."' name ='delete-btn' type='submit'>Delete</button>";
-      }
- echo"</div>"; 
+  echo "</div>";   
+ echo"</div>";
+ echo "<div class='row'>";
+  echo "<div class='col-md-8'>";
+  echo  "<h3><a id='name' href = 'profile.php?user=".$users->username ."'>" .$users->username ."</a></h3>";
  echo "</div>";
-   echo '</div>';
+ echo "</div>";   
+ echo"</div>";  
+ 
   } 
   }
   
 
 
     ?>
-    </div>
-  </div>
+    
+  
 </div>
-  <!-- comment form -->
-  <div id="input-form">
-  <form id="form"  method="post">
- 
-    <input type="hidden" name="postid" id="postid" value="4">
-    <label>
-   <input type="hidden" name="username" id="username" value="<?php echo escape($data->username); ?>">
-  Username: <?php echo escape($data->username); ?>
-    </label>
-</br>
-    <label>
-      <span>Your comment *</span>
-      <textarea name="comment" id="comment" required="true" cols="30" rows="10" placeholder="Type your comment here...." required></textarea>
-    </label>
-</br>
-   <a href="#post"><input type="submit" id="submit" value="Submit Comment"></a>
-  </form>
-  </div>
-  </br>
-  </br>
-  </br>
-  </br>
   <div class="navbar navbar-default navbar-fixed-bottom">
         <div class="container-fluid">
             <div class="navbar-text pull-left" id="author">

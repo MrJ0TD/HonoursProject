@@ -44,7 +44,12 @@ class user{
 			throw new Exception('There was a problem creating this account.');
 		}
 	}
-
+	public function message($fields = array()) {
+		if($this->_db->insert('message', $fields)) {
+			throw new Exception('There was a problem sending this message.');
+		}
+	}
+	
 	public function find($user = null){
 		if($user) {
 			$field = (is_numeric($user)) ? 'id' : 'username';

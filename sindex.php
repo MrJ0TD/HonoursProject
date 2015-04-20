@@ -5,9 +5,9 @@ if(Session::exists('home')) {
 	echo '<p>' . Session::flash('home') . '</p>';
 }
 
-$user = new user(); 
-if($user->isLoggedIn()) {
-	
+
+if(isset($_SESSION['steamid'])) {
+include ('steamauth/userInfo.php');	
 ?>
 
 <html>
@@ -21,7 +21,7 @@ if($user->isLoggedIn()) {
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
  
-<script src="jqueryajax.js"></script>
+
 </head>
 <body>
 	<nav class="navbar navbar-default navbar-fixed-top" >
@@ -46,62 +46,30 @@ if($user->isLoggedIn()) {
             <li><a href="Fighting.php">Fighting</a></li>
             <li><a href="Horror.php">Horror</a></li>
             <li><a href="Sci-Fi.php">Sci-Fi</a></li>
-            <li><a href="MMO.php">MMO</a></li>
             <li><a href="FPS.php">FPS</a></li>
-            
-          </ul>
-        </li> 
-         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">View Gaming Platforms<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="playstation.php">Playstation</a></li>
-            <li><a href="xbox.php">Xbox</a></li>
-            <li><a href="nintendo.php">Nintendo</a></li>
-            <li><a href="pc.php">PC</a></li>
-            
           </ul>
         </li> 
 				<li><a href="pm.php">View messages</a></li> 
-				
+				<li><a href="#">Contact</a></li>
 			</ul>
 		</div>
 		</div>
 	</div>
    </nav>
 
-  <?php if($user->isLoggedIn()){
-  ?>
-   		<h1 >Hello <a href="profile.php?user=<?php echo escape($user->data()->username); ?>"><?php echo escape($user->data()->username); ?></a>!</h1>
+   
+   		<h1 >Hello <a href="sprofile.php?user=<?php echo escape($steamprofile['personaname']); ?>"><?php echo escape($steamprofile['personaname']); ?></a>!</h1>
 
 	<ul class="nav nav-pills nav-stacked">
 		
-		<li li role="presentation"><a href="update.php">Update details</a></li>
-		<li li role="presentation"><a href="pm.php">View your private messages</a></li>
-		<li li role="presentation"><a href="changepassword.php">Change Password</a></li>
-		<li li role="presentation"><a href="logout.php">Log Out</a></li>
-	</ul>
-	</div>
-<?php
-} else if(isset($_SESSION['steamid'])){
-?>
-	<h1 >Hello <a href="profile.php?user=<?php echo escape($steamprofile['personaname']); ?>"><?php echo escape($steamprofile['personaname']); ?></a>!</h1>
-
-	<ul class="nav nav-pills nav-stacked">
 		
-		<li li role="presentation"><a href="update.php">Update details</a></li>
 		<li li role="presentation"><a href="pm.php">View your private messages</a></li>
-		<li li role="presentation"><a href="changepassword.php">Change Password</a></li>
-		<li li role="presentation"><a href="logout.php">Log Out</a></li>
+		
+		<li li role="presentation"><a href="slogout.php">Log Out</a></li>
 	</ul>
 	</div>
-	<?php
-}
-?>
 </div>
 <?php 
-if($user->hasPermission('admin')){
-		echo '<p>Evening Admin</p>';
-}
 
 } 
 	
@@ -110,14 +78,5 @@ else {
 	}
 
 ?>
-
-<div class="navbar navbar-default navbar-fixed-bottom">
-        <div class="container-fluid">
-            <div class="navbar-text pull-left" id="author">
-		<p class="text-muted">&copy; Joshua McGregor 2015</p>
-            </div>
-            
-            </div>
-        </div>
 </body>
 </html>

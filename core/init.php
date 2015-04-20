@@ -3,10 +3,10 @@ session_start();
 
 $GLOBALS['config'] = array(
 	'mysql' => array(
-			'host' => '127.0.0.1',
-			'username' =>'root',
+			'host' => '',
+			'username' =>'',
 			'password' => '',
-			'db' => 'gamerlocator'
+			'db' => ''
 
 		),
 	'remember' => array(

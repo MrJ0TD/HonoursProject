@@ -1,18 +1,6 @@
-<html>
-<head>
-	 <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GamerLocator</title>
-  <link rel="stylesheet" type="text/css" href="css/login.css">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-
-
-</head>
 <?php 
 require_once 'core/init.php';
+
 $user = new User();
 if($user->isLoggedIn()) {
 	Redirect::to('index.php');
@@ -36,7 +24,7 @@ if(Input::exists()){
 			if($login) {
 				Redirect::to('index.php');
 			} else {
-				echo '<p>Sorry, you appear to be a bogus gas man!</p>';
+				echo '<h3>Sorry, it appears you have entered something wrong!</h3>';
 			}
 
 		} else {
@@ -49,17 +37,30 @@ if(Input::exists()){
 }
 
 ?>
+<html>
+<head>
+	 <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GamerLocator</title>
+  <link rel="stylesheet" type="text/css" href="css/login.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+
+</head>
 <div class="container">
 
 <div class="jumbotron">
-  <h1>Gamerlocator</h1> 
+  
  </div>
 
 
 <div class="row">
   <div class="col-md-12">
     
-	<h2>Looking for a way to find poeple to play some of your favourite games with? Then look no more! Gamerlocator is a simple app that will help you find gamers to play with via game genres.</h2>
+	<h2>Looking for a way to find people to play some of your favourite games with? Then look no more! Gamerlocator is a simple app that will help you find gamers to play with via game genres.</h2>
     
   </div>
 </div>
@@ -80,11 +81,23 @@ if(Input::exists()){
                 <input type="checkbox" name="remember" id="remember" >
                     Remember me
                 </label>
-                <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
+               
                 </form>
             </div>
             <a href="register.php" class="text-center new-account">Create an account </a>
+           
         </div>
     </div>
 </div>
-
+</br>
+</br>
+</br>
+</br>
+<div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container-fluid">
+            <div class="navbar-text pull-left" id="author">
+		<p class="text-muted">&copy; Joshua McGregor 2015</p>
+            </div>
+            
+            </div>
+        </div>

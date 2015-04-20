@@ -33,7 +33,8 @@ $data = $user->data();
       $comment = DB::getInstance()->insert('comment', array(
           'username' => "$username",
           'comment' => "$sub",
-          'post_id' =>"$postid"
+          'post_id' =>"$postid",
+          'filepath'=>$data->filepath
         ));
     }  catch(Exception $e) {
         die($e->getMessage());
